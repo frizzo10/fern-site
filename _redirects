@@ -1,0 +1,1 @@
+/share/:id  https://app.clickpickandcook.com/.netlify/functions/share-preview?id=:id  302
