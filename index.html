@@ -49,12 +49,21 @@
     }
 
     .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
       font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
+      font-size: 2.4rem;
       font-weight: 700;
       color: var(--green);
       text-decoration: none;
       letter-spacing: -0.5px;
+    }
+
+    .logo img {
+      height: 48px;
+      width: 48px;
+      border-radius: 10px;
     }
 
     .logo span { color: var(--orange); }
@@ -180,6 +189,33 @@
     .btn-ghost:hover { color: var(--green); }
     .btn-ghost::after { content: '→'; transition: transform 0.2s; }
     .btn-ghost:hover::after { transform: translateX(4px); }
+
+    /* App Store / Google Play badges -- self-contained SVG, no external
+       image dependency. Currently link nowhere (href="#") since the app
+       isn't published to either store yet -- wire up real store URLs once
+       it is. */
+    .store-badges {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .store-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: #000;
+      color: #fff;
+      border-radius: 10px;
+      padding: 0.55rem 1.1rem;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .store-badge:hover { opacity: 0.85; transform: translateY(-1px); }
+    .store-badge svg { flex-shrink: 0; }
+    .store-badge-text { display: flex; flex-direction: column; line-height: 1.15; }
+    .store-badge-text small { font-size: 0.6rem; letter-spacing: 0.04em; opacity: 0.85; font-weight: 400; }
+    .store-badge-text strong { font-size: 1.05rem; font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 600; }
 
     /* Hero image collage */
     .hero-visual {
@@ -787,7 +823,7 @@
 
   <!-- NAV -->
   <nav>
-    <a href="#" class="logo">Fern</a>
+    <a href="#" class="logo"><img src="logo-icon.png" alt="Fern logo" />Fern</a>
     <div>
       <a href="#how" class="nav-link">How It Works</a>
       <a href="#features" class="nav-link">Features</a>
@@ -806,6 +842,16 @@
       <div class="hero-actions">
         <a href="https://app.clickpickandcook.com" class="btn-primary">Sign Up Free</a>
         <a href="#how" class="btn-ghost">See how it works</a>
+      </div>
+      <div class="store-badges">
+        <a href="#" class="store-badge" aria-label="Download on the App Store">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M16.365 1.43c0 1.14-.493 2.27-1.177 3.08-.744.9-1.99 1.57-2.987 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.572-2.27 1.206-2.98.804-.94 2.142-1.64 3.248-1.68.03.13.05.28.05.43zm4.565 15.71c-.03.07-.463 1.58-1.518 3.12-.945 1.34-1.94 2.71-3.43 2.71-1.517 0-1.9-.88-3.63-.88-1.698 0-2.302.91-3.67.91-1.377 0-2.332-1.26-3.428-2.8-1.287-1.82-2.323-4.63-2.323-7.28 0-4.28 2.797-6.55 5.552-6.55 1.448 0 2.675.95 3.6.95.865 0 2.222-1.01 3.902-1.01.635 0 2.917.06 4.42 2.22-.114.07-2.634 1.54-2.634 4.66 0 3.73 3.31 5.02 3.16 5.95z"/></svg>
+          <span class="store-badge-text"><small>Download on the</small><strong>App Store</strong></span>
+        </a>
+        <a href="#" class="store-badge" aria-label="Get it on Google Play">
+          <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#00D9FF" d="M3.6 2.6c-.3.3-.5.7-.5 1.2v16.4c0 .5.2.9.5 1.2l.1.1L13.6 12 3.7 2.5l-.1.1z"/><path fill="#00F076" d="M17 15.4l-3.4-3.4-10 10c.4.4 1 .4 1.6.1L17 15.4"/><path fill="#FF3A44" d="M17 8.6L5.2 1.9c-.6-.3-1.2-.3-1.6.1l10 10 3.4-3.4"/><path fill="#FFCF00" d="M20.8 10.6l-3.3-1.9-3.5 3.3 3.5 3.4 3.3-1.9c.9-.6.9-2.3 0-2.9"/></svg>
+          <span class="store-badge-text"><small>GET IT ON</small><strong>Google Play</strong></span>
+        </a>
       </div>
     </div>
     <div class="hero-visual fade-up" style="transition-delay: 0.2s">
@@ -1086,6 +1132,16 @@
       <div class="cta-actions">
         <a href="https://app.clickpickandcook.com" class="btn-primary">Sign Up Free</a>
         <a href="https://app.clickpickandcook.com/login" class="btn-secondary">I already have an account</a>
+      </div>
+      <div class="store-badges" style="justify-content: center; margin: 1.25rem auto 0">
+        <a href="#" class="store-badge" aria-label="Download on the App Store">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M16.365 1.43c0 1.14-.493 2.27-1.177 3.08-.744.9-1.99 1.57-2.987 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.572-2.27 1.206-2.98.804-.94 2.142-1.64 3.248-1.68.03.13.05.28.05.43zm4.565 15.71c-.03.07-.463 1.58-1.518 3.12-.945 1.34-1.94 2.71-3.43 2.71-1.517 0-1.9-.88-3.63-.88-1.698 0-2.302.91-3.67.91-1.377 0-2.332-1.26-3.428-2.8-1.287-1.82-2.323-4.63-2.323-7.28 0-4.28 2.797-6.55 5.552-6.55 1.448 0 2.675.95 3.6.95.865 0 2.222-1.01 3.902-1.01.635 0 2.917.06 4.42 2.22-.114.07-2.634 1.54-2.634 4.66 0 3.73 3.31 5.02 3.16 5.95z"/></svg>
+          <span class="store-badge-text"><small>Download on the</small><strong>App Store</strong></span>
+        </a>
+        <a href="#" class="store-badge" aria-label="Get it on Google Play">
+          <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#00D9FF" d="M3.6 2.6c-.3.3-.5.7-.5 1.2v16.4c0 .5.2.9.5 1.2l.1.1L13.6 12 3.7 2.5l-.1.1z"/><path fill="#00F076" d="M17 15.4l-3.4-3.4-10 10c.4.4 1 .4 1.6.1L17 15.4"/><path fill="#FF3A44" d="M17 8.6L5.2 1.9c-.6-.3-1.2-.3-1.6.1l10 10 3.4-3.4"/><path fill="#FFCF00" d="M20.8 10.6l-3.3-1.9-3.5 3.3 3.5 3.4 3.3-1.9c.9-.6.9-2.3 0-2.9"/></svg>
+          <span class="store-badge-text"><small>GET IT ON</small><strong>Google Play</strong></span>
+        </a>
       </div>
       <p class="cta-note">Free forever for home cooks. No credit card required.</p>
     </div>
