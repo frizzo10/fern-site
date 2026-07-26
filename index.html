@@ -1,1504 +1,1124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fern — Personal AI for the way your family eats</title>
-<meta name="description" content="Fern is your Personal AI for the kitchen. She learns how your family eats, plans, shops, and lives — and gets smarter every week. Meet your sous chef.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-:root {
-  --forest:   #1C3A1A;
-  --green:    #2D5A27;
-  --mid:      #4A7C2F;
-  --leaf:     #7DBD6A;
-  --mint:     #A8D5A2;
-  --cream:    #F5F0E8;
-  --paper:    #F9F7F4;
-  --ink:      #1A1A1A;
-  --muted:    #6B6B6B;
-  --border:   rgba(28,58,26,0.12);
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--paper);
-  color: var(--ink);
-  overflow-x: hidden;
-}
-
-/* ── NAV ── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 1.25rem 3rem;
-  background: rgba(249,247,244,0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-}
-
-.nav-logo {
-  display: flex; align-items: center; gap: .6rem;
-  text-decoration: none;
-}
-
-.nav-logo svg { width: 28px; height: 36px; }
-
-.nav-logo-text {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.4rem;
-  font-weight: 400;
-  color: var(--forest);
-  letter-spacing: .03em;
-}
-
-.nav-links {
-  display: flex; align-items: center; gap: 2.5rem;
-  list-style: none;
-}
-
-.nav-links a {
-  text-decoration: none;
-  font-size: .88rem;
-  color: var(--muted);
-  font-weight: 400;
-  letter-spacing: .02em;
-  transition: color .2s;
-}
-
-.nav-links a:hover { color: var(--forest); }
-
-.nav-cta {
-  background: var(--forest);
-  color: var(--cream) !important;
-  padding: .55rem 1.4rem;
-  border-radius: 100px;
-  font-weight: 500 !important;
-  transition: background .2s !important;
-}
-
-.nav-cta:hover { background: var(--green) !important; color: var(--cream) !important; }
-
-/* ── HERO ── */
-.hero {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 4rem;
-  padding: 8rem 3rem 5rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: .5rem;
-  background: rgba(28,58,26,.08);
-  color: var(--green);
-  font-size: .75rem;
-  font-weight: 500;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  padding: .35rem .85rem;
-  border-radius: 100px;
-  margin-bottom: 1.5rem;
-}
-
-.hero-eyebrow span { width: 6px; height: 6px; border-radius: 50%; background: var(--leaf); display: inline-block; }
-
-h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2.8rem, 5vw, 4.2rem);
-  font-weight: 400;
-  line-height: 1.12;
-  color: var(--forest);
-  margin-bottom: 1.5rem;
-  letter-spacing: -.01em;
-}
-
-h1 em {
-  font-style: italic;
-  color: var(--mid);
-}
-
-.hero-sub {
-  font-size: 1.1rem;
-  color: var(--muted);
-  line-height: 1.75;
-  max-width: 480px;
-  margin-bottom: 2.5rem;
-  font-weight: 300;
-}
-
-.hero-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.btn-primary {
-  background: var(--forest);
-  color: var(--cream);
-  padding: .85rem 2rem;
-  border-radius: 100px;
-  text-decoration: none;
-  font-size: .95rem;
-  font-weight: 500;
-  transition: background .2s, transform .15s;
-  display: inline-flex;
-  align-items: center;
-  gap: .5rem;
-}
-
-.btn-primary:hover { background: var(--green); transform: translateY(-1px); }
-
-.btn-secondary {
-  color: var(--forest);
-  text-decoration: none;
-  font-size: .95rem;
-  font-weight: 400;
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
-  padding: .85rem .5rem;
-  border-bottom: 1px solid transparent;
-  transition: border-color .2s;
-}
-
-.btn-secondary:hover { border-color: var(--forest); }
-
-.hero-trust {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border);
-}
-
-.hero-trust-item {
-  font-size: .8rem;
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  gap: .4rem;
-}
-
-.hero-trust-item::before {
-  content: '';
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--leaf);
-  flex-shrink: 0;
-}
-
-/* Hero visual */
-.hero-visual {
-  position: relative;
-  display: flex;
-  justify-content: center;
-}
-
-.phone-mockup {
-  width: 280px;
-  background: var(--forest);
-  border-radius: 36px;
-  padding: 2rem 1.5rem;
-  box-shadow: 0 40px 80px rgba(28,58,26,.25), 0 8px 24px rgba(28,58,26,.15);
-  position: relative;
-  z-index: 2;
-}
-
-.phone-notch {
-  width: 80px; height: 20px;
-  background: var(--ink);
-  border-radius: 0 0 12px 12px;
-  margin: -2rem auto 1.5rem;
-}
-
-.phone-remi-intro {
-  background: rgba(255,255,255,.06);
-  border-radius: 12px;
-  padding: .85rem 1rem;
-  margin-bottom: .75rem;
-}
-
-.phone-remi-name {
-  font-size: .62rem;
-  color: var(--mint);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  margin-bottom: .3rem;
-}
-
-.phone-remi-text {
-  font-size: .82rem;
-  color: var(--cream);
-  line-height: 1.55;
-}
-
-.phone-pill {
-  background: var(--green);
-  border-radius: 20px;
-  padding: .65rem 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: .5rem;
-}
-
-.phone-pill-text {
-  font-size: .78rem;
-  color: #A8D5A2;
-  flex: 1;
-}
-
-.phone-pill-tag {
-  font-size: .62rem;
-  background: rgba(255,255,255,.15);
-  color: var(--cream);
-  padding: .15rem .45rem;
-  border-radius: 20px;
-}
-
-.phone-section {
-  font-size: .6rem;
-  color: var(--mint);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  margin: .85rem 0 .5rem;
-  opacity: .7;
-}
-
-.phone-item {
-  display: flex;
-  align-items: center;
-  gap: .65rem;
-  padding: .5rem 0;
-  border-bottom: 1px solid rgba(255,255,255,.06);
-}
-
-.phone-check {
-  width: 20px; height: 20px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(125,189,106,.4);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.phone-check.done {
-  background: var(--leaf);
-  border-color: var(--leaf);
-}
-
-.phone-check.done::after { content: '✓'; font-size: .6rem; color: var(--forest); }
-
-.phone-item-name {
-  font-size: .78rem;
-  color: var(--cream);
-  flex: 1;
-}
-
-.phone-item-name.done {
-  text-decoration: line-through;
-  opacity: .4;
-}
-
-.phone-item-sub {
-  font-size: .62rem;
-  color: var(--mint);
-  opacity: .6;
-}
-
-.phone-next-btn {
-  background: var(--leaf);
-  color: var(--forest);
-  border-radius: 12px;
-  padding: .75rem;
-  text-align: center;
-  font-size: .82rem;
-  font-weight: 500;
-  margin-top: 1rem;
-}
-
-/* Floating cards around phone */
-.float-card {
-  position: absolute;
-  background: white;
-  border-radius: 16px;
-  padding: .85rem 1.1rem;
-  box-shadow: 0 8px 32px rgba(0,0,0,.1);
-  font-size: .78rem;
-  max-width: 180px;
-  z-index: 3;
-  animation: float 4s ease-in-out infinite;
-}
-
-.float-card:nth-child(2) { animation-delay: -1.5s; }
-.float-card:nth-child(3) { animation-delay: -3s; }
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-.float-card-label {
-  font-size: .6rem;
-  color: var(--leaf);
-  font-weight: 500;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  margin-bottom: .3rem;
-}
-
-.float-card-text { color: var(--ink); line-height: 1.4; font-weight: 400; }
-
-.fc-1 { top: 5%; left: -15%; }
-.fc-2 { bottom: 15%; left: -18%; }
-.fc-3 { top: 20%; right: -15%; }
-
-/* ── SECTION SHARED ── */
-section { padding: 6rem 3rem; }
-
-.section-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.section-eyebrow {
-  font-size: .72rem;
-  font-weight: 500;
-  letter-spacing: .15em;
-  text-transform: uppercase;
-  color: var(--mid);
-  margin-bottom: 1rem;
-}
-
-h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2rem, 3.5vw, 3rem);
-  font-weight: 400;
-  line-height: 1.2;
-  color: var(--forest);
-  margin-bottom: 1.25rem;
-  letter-spacing: -.01em;
-}
-
-h2 em { font-style: italic; color: var(--mid); }
-
-.section-sub {
-  font-size: 1rem;
-  color: var(--muted);
-  line-height: 1.75;
-  max-width: 560px;
-  font-weight: 300;
-}
-
-/* ── WHAT REMI KNOWS ── */
-.knows-section { background: var(--forest); color: var(--cream); }
-
-.knows-section .section-eyebrow { color: var(--mint); }
-.knows-section h2 { color: var(--cream); }
-.knows-section .section-sub { color: rgba(245,240,232,.65); }
-
-.knows-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-top: 3.5rem;
-}
-
-.knows-card {
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 16px;
-  padding: 1.75rem;
-  transition: background .2s;
-}
-
-.knows-card:hover { background: rgba(255,255,255,.08); }
-
-.knows-icon {
-  font-size: 1.75rem;
-  margin-bottom: 1rem;
-}
-
-.knows-card h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.15rem;
-  font-weight: 400;
-  color: var(--cream);
-  margin-bottom: .5rem;
-}
-
-.knows-card p {
-  font-size: .85rem;
-  color: rgba(245,240,232,.55);
-  line-height: 1.7;
-  font-weight: 300;
-}
-
-/* ── FEATURES ── */
-.features-section { background: var(--paper); }
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  margin-top: 3.5rem;
-}
-
-.feature-card {
-  background: white;
-  border-radius: 20px;
-  padding: 2rem;
-  border: 1px solid var(--border);
-  position: relative;
-  overflow: hidden;
-  transition: transform .2s, box-shadow .2s;
-}
-
-.feature-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 40px rgba(28,58,26,.1);
-}
-
-.feature-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--forest), var(--leaf));
-}
-
-.feature-tag {
-  display: inline-block;
-  font-size: .65rem;
-  font-weight: 500;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  padding: .25rem .65rem;
-  border-radius: 100px;
-  margin-bottom: 1.25rem;
-}
-
-.tag-free { background: rgba(74,124,47,.1); color: var(--mid); }
-.tag-pro { background: rgba(28,58,26,.08); color: var(--forest); }
-.tag-promax { background: var(--forest); color: var(--cream); }
-
-.feature-card h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.3rem;
-  font-weight: 400;
-  color: var(--forest);
-  margin-bottom: .6rem;
-}
-
-.feature-card p {
-  font-size: .88rem;
-  color: var(--muted);
-  line-height: 1.7;
-  font-weight: 300;
-}
-
-.feature-items {
-  margin-top: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: .4rem;
-}
-
-.feature-item {
-  display: flex;
-  align-items: center;
-  gap: .6rem;
-  font-size: .82rem;
-  color: var(--muted);
-}
-
-.feature-item::before {
-  content: '';
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: var(--leaf);
-  flex-shrink: 0;
-}
-
-/* ── PERSONAL AI SECTION ── */
-.personal-ai-section {
-  background: var(--cream);
-}
-
-.personal-ai-inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5rem;
-  align-items: center;
-}
-
-.timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin-top: 2.5rem;
-}
-
-.timeline-item {
-  display: flex;
-  gap: 1.25rem;
-  padding-bottom: 2rem;
-  position: relative;
-}
-
-.timeline-item:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  left: 15px; top: 32px; bottom: 0;
-  width: 1px;
-  background: var(--border);
-}
-
-.timeline-dot {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: var(--forest);
-  color: var(--cream);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: .75rem;
-  font-weight: 500;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 1;
-}
-
-.timeline-content h4 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1rem;
-  font-weight: 400;
-  color: var(--forest);
-  margin-bottom: .3rem;
-}
-
-.timeline-content p {
-  font-size: .83rem;
-  color: var(--muted);
-  line-height: 1.6;
-  font-weight: 300;
-}
-
-.remi-quote-block {
-  background: var(--forest);
-  border-radius: 24px;
-  padding: 2.5rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.remi-quote-block::before {
-  content: '"';
-  position: absolute;
-  top: -20px; left: 20px;
-  font-family: 'Playfair Display', serif;
-  font-size: 8rem;
-  color: rgba(255,255,255,.06);
-  line-height: 1;
-}
-
-.remi-quote-name {
-  font-size: .65rem;
-  color: var(--mint);
-  letter-spacing: .15em;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-}
-
-.remi-quote-text {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.15rem;
-  color: var(--cream);
-  line-height: 1.65;
-  font-weight: 400;
-  font-style: italic;
-  margin-bottom: 1.5rem;
-}
-
-.remi-quote-context {
-  font-size: .78rem;
-  color: rgba(245,240,232,.45);
-  line-height: 1.6;
-  font-weight: 300;
-}
-
-/* ── LIFE CHANGES ── */
-.life-section { background: white; }
-
-.life-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-top: 3.5rem;
-}
-
-.life-card {
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 1.5rem;
-  transition: border-color .2s, transform .2s;
-}
-
-.life-card:hover {
-  border-color: var(--leaf);
-  transform: translateY(-2px);
-}
-
-.life-card-emoji { font-size: 1.5rem; margin-bottom: .75rem; }
-
-.life-card h4 {
-  font-family: 'Playfair Display', serif;
-  font-size: .95rem;
-  font-weight: 400;
-  color: var(--forest);
-  margin-bottom: .4rem;
-}
-
-.life-card p {
-  font-size: .78rem;
-  color: var(--muted);
-  line-height: 1.6;
-  font-weight: 300;
-}
-
-.life-card-remi {
-  margin-top: .85rem;
-  padding-top: .85rem;
-  border-top: 1px solid var(--border);
-  font-size: .75rem;
-  color: var(--mid);
-  font-style: italic;
-  line-height: 1.5;
-}
-
-/* ── PRICING ── */
-.pricing-section { background: var(--paper); }
-
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-top: 3.5rem;
-  align-items: start;
-}
-
-.pricing-card {
-  border-radius: 20px;
-  padding: 2rem;
-  border: 1px solid var(--border);
-  background: white;
-}
-
-.pricing-card.featured {
-  background: var(--forest);
-  border-color: var(--forest);
-  position: relative;
-}
-
-.pricing-badge {
-  position: absolute;
-  top: -12px; left: 50%;
-  transform: translateX(-50%);
-  background: var(--leaf);
-  color: var(--forest);
-  font-size: .65rem;
-  font-weight: 500;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  padding: .3rem .85rem;
-  border-radius: 100px;
-  white-space: nowrap;
-}
-
-.pricing-tier {
-  font-size: .7rem;
-  font-weight: 500;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--mid);
-  margin-bottom: .75rem;
-}
-
-.pricing-card.featured .pricing-tier { color: var(--mint); }
-
-.pricing-price {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.5rem;
-  font-weight: 400;
-  color: var(--forest);
-  line-height: 1;
-  margin-bottom: .25rem;
-}
-
-.pricing-card.featured .pricing-price { color: var(--cream); }
-
-.pricing-period {
-  font-size: .8rem;
-  color: var(--muted);
-  margin-bottom: 1.5rem;
-}
-
-.pricing-card.featured .pricing-period { color: rgba(245,240,232,.5); }
-
-.pricing-features {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: .65rem;
-  margin-bottom: 1.75rem;
-}
-
-.pricing-features li {
-  display: flex;
-  gap: .6rem;
-  font-size: .83rem;
-  color: var(--muted);
-  font-weight: 300;
-  align-items: flex-start;
-}
-
-.pricing-card.featured .pricing-features li { color: rgba(245,240,232,.75); }
-
-.pricing-features li::before {
-  content: '✓';
-  color: var(--leaf);
-  font-weight: 500;
-  flex-shrink: 0;
-  margin-top: .05rem;
-}
-
-.pricing-btn {
-  display: block;
-  text-align: center;
-  padding: .8rem;
-  border-radius: 100px;
-  font-size: .88rem;
-  font-weight: 500;
-  text-decoration: none;
-  transition: all .2s;
-}
-
-.pricing-btn-outline {
-  border: 1px solid var(--border);
-  color: var(--forest);
-}
-
-.pricing-btn-outline:hover { border-color: var(--forest); }
-
-.pricing-btn-filled {
-  background: var(--leaf);
-  color: var(--forest);
-}
-
-.pricing-btn-filled:hover { background: var(--mint); }
-
-.pricing-btn-ghost {
-  border: 1px solid rgba(255,255,255,.2);
-  color: var(--cream);
-}
-
-.pricing-btn-ghost:hover { border-color: rgba(255,255,255,.5); }
-
-/* ── NEVER FORGETS ── */
-.never-forgets {
-  background: var(--forest);
-  text-align: center;
-  padding: 7rem 3rem;
-}
-
-.never-forgets h2 {
-  color: var(--cream);
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  max-width: 800px;
-  margin: 0 auto 1.5rem;
-}
-
-.never-forgets h2 em { color: var(--leaf); }
-
-.never-forgets p {
-  color: rgba(245,240,232,.6);
-  font-size: 1.05rem;
-  line-height: 1.75;
-  max-width: 560px;
-  margin: 0 auto 2.5rem;
-  font-weight: 300;
-}
-
-/* ── FOOTER ── */
-footer {
-  background: var(--ink);
-  color: rgba(255,255,255,.5);
-  padding: 4rem 3rem;
-}
-
-.footer-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 3rem;
-}
-
-.footer-brand {
-  display: flex;
-  align-items: center;
-  gap: .6rem;
-  margin-bottom: 1rem;
-}
-
-.footer-logo-text {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.2rem;
-  color: white;
-  letter-spacing: .03em;
-}
-
-.footer-tagline {
-  font-size: .82rem;
-  line-height: 1.6;
-  max-width: 260px;
-  font-weight: 300;
-}
-
-.footer-col h5 {
-  font-size: .72rem;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.3);
-  margin-bottom: 1rem;
-}
-
-.footer-col a {
-  display: block;
-  color: rgba(255,255,255,.5);
-  text-decoration: none;
-  font-size: .85rem;
-  margin-bottom: .5rem;
-  transition: color .2s;
-  font-weight: 300;
-}
-
-.footer-col a:hover { color: white; }
-
-.footer-bottom {
-  max-width: 1200px;
-  margin: 3rem auto 0;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255,255,255,.08);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: .78rem;
-  font-weight: 300;
-}
-
-/* ── ANIMATIONS ── */
-.fade-up {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity .6s ease, transform .6s ease;
-}
-
-.fade-up.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ── RESPONSIVE ── */
-@media (max-width: 900px) {
-  nav { padding: 1rem 1.5rem; }
-  .nav-links { display: none; }
-  .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 4rem; }
-  .hero-visual { display: none; }
-  section { padding: 4rem 1.5rem; }
-  .knows-grid { grid-template-columns: 1fr; }
-  .features-grid { grid-template-columns: 1fr; }
-  .personal-ai-inner { grid-template-columns: 1fr; }
-  .life-grid { grid-template-columns: repeat(2, 1fr); }
-  .pricing-grid { grid-template-columns: 1fr; }
-  .footer-inner { grid-template-columns: 1fr 1fr; }
-  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Click Pick & Cook — From Circular to Table</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green: #3a7d44;
+      --green-light: #5aaa68;
+      --green-pale: #e8f5eb;
+      --cream: #fdfaf5;
+      --orange: #f4845f;
+      --orange-light: #fde8e0;
+      --text: #1a1a1a;
+      --text-mid: #555;
+      --text-light: #888;
+      --white: #ffffff;
+      --radius: 20px;
+      --shadow: 0 8px 40px rgba(0,0,0,0.10);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(253,250,245,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(58,125,68,0.10);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--green);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span { color: var(--orange); }
+
+    nav a.nav-link {
+      color: var(--text-mid);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-left: 32px;
+      transition: color 0.2s;
+    }
+    nav a.nav-link:hover { color: var(--green); }
+
+    .nav-cta {
+      margin-left: 32px;
+      background: var(--green);
+      color: var(--white) !important;
+      padding: 10px 24px;
+      border-radius: 100px;
+      font-weight: 600 !important;
+      transition: background 0.2s, transform 0.15s !important;
+    }
+    .nav-cta:hover { background: var(--green-light) !important; transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 120px 48px 80px;
+      gap: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(90,170,104,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-text { position: relative; z-index: 2; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green-pale);
+      color: var(--green);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+      letter-spacing: 0.3px;
+    }
+
+    .hero-badge::before { content: '✦'; font-size: 0.7rem; }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 24px;
+      letter-spacing: -1px;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--green);
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+      max-width: 480px;
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: var(--white);
+      padding: 16px 36px;
+      border-radius: 100px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(58,125,68,0.3);
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      background: var(--green-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(58,125,68,0.35);
+    }
+
+    .btn-ghost {
+      color: var(--text-mid);
+      font-size: 0.95rem;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .btn-ghost:hover { color: var(--green); }
+    .btn-ghost::after { content: '→'; transition: transform 0.2s; }
+    .btn-ghost:hover::after { transform: translateX(4px); }
+
+    /* Hero image collage */
+    .hero-visual {
+      position: relative;
+      height: 560px;
+    }
+
+    .hero-img-main {
+      position: absolute;
+      top: 0; right: 0;
+      width: 75%;
+      height: 420px;
+      border-radius: var(--radius);
+      object-fit: cover;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-img-sub {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 55%;
+      height: 280px;
+      border-radius: var(--radius);
+      object-fit: cover;
+      box-shadow: var(--shadow);
+      border: 4px solid var(--cream);
+    }
+
+    .hero-pill {
+      position: absolute;
+      top: 50%; right: -20px;
+      transform: translateY(-50%);
+      background: var(--white);
+      border-radius: 16px;
+      padding: 14px 18px;
+      box-shadow: var(--shadow);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-pill-icon {
+      width: 36px; height: 36px;
+      background: var(--orange-light);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    /* ── SOCIAL PROOF ── */
+    .social-proof {
+      background: var(--green);
+      padding: 20px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .proof-item {
+      color: var(--white);
+      text-align: center;
+    }
+
+    .proof-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      display: block;
+    }
+
+    .proof-label {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    .proof-divider {
+      width: 1px;
+      height: 40px;
+      background: rgba(255,255,255,0.25);
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 100px 48px; }
+
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      margin-bottom: 20px;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+      font-weight: 300;
+      max-width: 560px;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how {
+      background: var(--white);
+    }
+
+    .how-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .how-header {
+      text-align: center;
+      margin-bottom: 72px;
+    }
+
+    .how-header .section-sub { margin: 0 auto; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      position: relative;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 48px;
+      left: calc(16.66% + 24px);
+      right: calc(16.66% + 24px);
+      height: 2px;
+      background: repeating-linear-gradient(90deg, var(--green-pale) 0, var(--green-pale) 8px, transparent 8px, transparent 16px);
+    }
+
+    .step {
+      text-align: center;
+      position: relative;
+    }
+
+    .step-icon {
+      width: 96px; height: 96px;
+      background: var(--green-pale);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      margin: 0 auto 24px;
+      position: relative;
+      z-index: 1;
+      border: 3px solid var(--white);
+      box-shadow: 0 4px 20px rgba(58,125,68,0.15);
+    }
+
+    .step-num {
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 28px; height: 28px;
+      background: var(--orange);
+      color: var(--white);
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+    }
+
+    .step p {
+      font-size: 0.95rem;
+      color: var(--text-mid);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* ── FEATURES ── */
+    .features { background: var(--cream); }
+
+    .features-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      margin-bottom: 100px;
+    }
+
+    .features-grid:last-child { margin-bottom: 0; }
+
+    .features-grid.reverse { direction: rtl; }
+    .features-grid.reverse > * { direction: ltr; }
+
+    .feature-img {
+      border-radius: var(--radius);
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      box-shadow: var(--shadow);
+    }
+
+    .feature-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--orange-light);
+      color: var(--orange);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .feature-text h2 { margin-bottom: 16px; }
+
+    .feature-list {
+      list-style: none;
+      margin-top: 28px;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+      font-size: 0.95rem;
+      color: var(--text-mid);
+      line-height: 1.5;
+    }
+
+    .feature-list li::before {
+      content: '✓';
+      width: 22px; height: 22px;
+      min-width: 22px;
+      background: var(--green-pale);
+      color: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-top: 1px;
+    }
+
+    /* ── FEATURE CARDS ── */
+    .feature-cards {
+      background: var(--white);
+      padding: 100px 48px;
+    }
+
+    .cards-inner { max-width: 1100px; margin: 0 auto; }
+
+    .cards-header { text-align: center; margin-bottom: 60px; }
+    .cards-header .section-sub { margin: 0 auto; }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .card {
+      background: var(--cream);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .card-emoji {
+      font-size: 2.4rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      font-size: 0.92rem;
+      color: var(--text-mid);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* ── ALEXA SECTION ── */
+    .alexa {
+      background: linear-gradient(135deg, #1a3a22 0%, #2d5c38 100%);
+      padding: 100px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .alexa::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(90,170,104,0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .alexa-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .alexa-text .section-label { color: var(--green-light); }
+    .alexa-text h2 { color: var(--white); }
+    .alexa-text .section-sub { color: rgba(255,255,255,0.7); }
+
+    .alexa-features {
+      margin-top: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .alexa-feat {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.95rem;
+    }
+
+    .alexa-feat-icon {
+      width: 40px; height: 40px;
+      min-width: 40px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .alexa-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .alexa-device {
+      width: 180px; height: 280px;
+      background: linear-gradient(160deg, #2a2a2a, #111);
+      border-radius: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+      position: relative;
+    }
+
+    .alexa-ring {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, #00caff, #0055ff, #00caff);
+      animation: spin 3s linear infinite;
+      box-shadow: 0 0 30px rgba(0,170,255,0.5);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .alexa-bubble {
+      position: absolute;
+      background: var(--white);
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      box-shadow: var(--shadow);
+      white-space: nowrap;
+    }
+
+    .alexa-bubble.top { top: -20px; right: -80px; }
+    .alexa-bubble.bottom { bottom: 20px; left: -100px; }
+    .alexa-bubble::before {
+      content: '🎙️ ';
+    }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials {
+      background: var(--green-pale);
+      padding: 100px 48px;
+    }
+
+    .testimonials-inner { max-width: 1100px; margin: 0 auto; }
+    .testimonials-header { text-align: center; margin-bottom: 60px; }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .testimonial {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 32px;
+    }
+
+    .stars {
+      color: #f4b942;
+      font-size: 1rem;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+    }
+
+    .testimonial blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .author-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--green-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--green);
+      flex-shrink: 0;
+    }
+
+    .author-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .author-role {
+      font-size: 0.82rem;
+      color: var(--text-light);
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: var(--cream);
+      padding: 120px 48px;
+      text-align: center;
+    }
+
+    .cta-inner { max-width: 700px; margin: 0 auto; }
+
+    .cta-inner h2 {
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      margin-bottom: 20px;
+    }
+
+    .cta-inner .section-sub { margin: 0 auto 40px; text-align: center; }
+
+    .cta-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--green);
+      border: 2px solid var(--green);
+      padding: 14px 32px;
+      border-radius: 100px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover { background: var(--green); color: var(--white); }
+
+    .cta-note {
+      margin-top: 20px;
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.6);
+      padding: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--white);
+      font-weight: 700;
+    }
+
+    .footer-logo span { color: var(--orange); }
+
+    .footer-links {
+      display: flex;
+      gap: 28px;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--white); }
+
+    footer p { font-size: 0.85rem; }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; }
+      .hero-visual { height: 340px; }
+      .hero-img-main { width: 80%; height: 260px; }
+      .hero-img-sub { width: 50%; height: 200px; }
+      .hero-pill { display: none; }
+      .steps { grid-template-columns: 1fr; }
+      .steps::before { display: none; }
+      .features-grid { grid-template-columns: 1fr; gap: 40px; }
+      .features-grid.reverse { direction: ltr; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .alexa-inner { grid-template-columns: 1fr; }
+      .alexa-visual { display: none; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      section, .feature-cards, .alexa, .testimonials, .cta-section { padding: 64px 24px; }
+      footer { padding: 32px 24px; flex-direction: column; text-align: center; }
+      .social-proof { padding: 20px 24px; gap: 28px; }
+      .proof-divider { display: none; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a href="/" class="nav-logo">
-    <svg viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M14 34 Q14 20 14 6" stroke="#2D5A27" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M14 22 Q7 15 4 18" stroke="#2D5A27" stroke-width="2" stroke-linecap="round"/>
-      <path d="M14 17 Q6 9 3 13" stroke="#4A7C2F" stroke-width="2" stroke-linecap="round"/>
-      <path d="M14 12 Q8 5 6 8" stroke="#7DBD6A" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M14 22 Q21 15 24 18" stroke="#2D5A27" stroke-width="2" stroke-linecap="round"/>
-      <path d="M14 17 Q22 9 25 13" stroke="#4A7C2F" stroke-width="2" stroke-linecap="round"/>
-      <path d="M14 12 Q20 5 22 8" stroke="#7DBD6A" stroke-width="1.8" stroke-linecap="round"/>
-    </svg>
-    <span class="nav-logo-text">fern</span>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#how-it-works">How it works</a></li>
-    <li><a href="#features">Features</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="https://app.clickpickandcook.com" class="nav-cta">Try Fern free</a></li>
-  </ul>
-</nav>
-
-<!-- HERO -->
-<section style="padding: 0;">
-<div class="hero">
-  <div class="hero-content">
-    <div class="hero-eyebrow fade-up">
-      <span></span>
-      Introducing Personal AI
-    </div>
-    <h1 class="fade-up">The AI that <em>never forgets</em> how your family eats.</h1>
-    <p class="hero-sub fade-up">
-      Fern learns your family's rhythms — what you love, when you shop, how much time you have. 
-      She plans, shops, cooks, and discovers with you. And she gets smarter every single week.
-    </p>
-    <div class="hero-actions fade-up">
-      <a href="https://app.clickpickandcook.com" class="btn-primary">
-        Meet your sous chef →
-      </a>
-      <a href="#how-it-works" class="btn-secondary">
-        See how it works
-      </a>
-    </div>
-    <div class="hero-trust fade-up">
-      <div class="hero-trust-item">Personal AI</div>
-      <div class="hero-trust-item">Always learning</div>
-      <div class="hero-trust-item">Never forgets</div>
-    </div>
-  </div>
-
-  <div class="hero-visual">
-    <!-- Floating cards -->
-    <div class="float-card fc-1">
-      <div class="float-card-label">Remi says</div>
-      <div class="float-card-text">Salmon's on sale — you have it planned Thursday 🎣</div>
-    </div>
-    <div class="float-card fc-2">
-      <div class="float-card-label">Remi knows</div>
-      <div class="float-card-text">Tuesday is soccer night. 20-min dinner coming up.</div>
-    </div>
-    <div class="float-card fc-3">
-      <div class="float-card-label">Personal Shopper</div>
-      <div class="float-card-text">You've arrived at Publix — 14 items, sorted by aisle ✓</div>
-    </div>
-
-    <!-- Phone -->
-    <div class="phone-mockup">
-      <div class="phone-notch"></div>
-      <div class="phone-remi-intro">
-        <div class="phone-remi-name">✨ your sous chef says</div>
-        <div class="phone-remi-text">Hey Kiki — you're near Publix. 14 items ready, sorted by aisle. Salmon's on sale — grab it for Thursday.</div>
-      </div>
-      <div class="phone-section">🥦 Produce — 4 items</div>
-      <div class="phone-item">
-        <div class="phone-check done"></div>
-        <div>
-          <div class="phone-item-name done">Cherry tomatoes</div>
-          <div class="phone-item-sub">Tuscan Chicken · Tue</div>
-        </div>
-      </div>
-      <div class="phone-item">
-        <div class="phone-check done"></div>
-        <div>
-          <div class="phone-item-name done">Baby spinach</div>
-          <div class="phone-item-sub">Shopping list</div>
-        </div>
-      </div>
-      <div class="phone-item">
-        <div class="phone-check"></div>
-        <div>
-          <div class="phone-item-name">Garlic</div>
-          <div class="phone-item-sub">Pasta bolognese · Mon</div>
-        </div>
-      </div>
-      <div class="phone-section">🥩 Meat & Seafood — 3 items</div>
-      <div class="phone-item">
-        <div class="phone-check"></div>
-        <div>
-          <div class="phone-item-name">Salmon fillet</div>
-          <div class="phone-item-sub" style="color:#7DBD6A;">On sale $8.99/lb · Thu dinner</div>
-        </div>
-      </div>
-      <div class="phone-next-btn">Next: Dairy & Eggs →</div>
-    </div>
-  </div>
-</div>
-</section>
-
-<!-- WHAT REMI KNOWS -->
-<section class="knows-section" id="how-it-works">
-  <div class="section-inner">
-    <div class="section-eyebrow fade-up">Personal AI</div>
-    <h2 class="fade-up">Not a chatbot. Not a search engine.<br><em>A relationship.</em></h2>
-    <p class="section-sub fade-up">You name her. She becomes yours. She has a name, a personality, and a memory. The more you use Fern, the better she knows you.</p>
-
-    <div class="knows-grid">
-      <div class="knows-card fade-up">
-        <div class="knows-icon">👋</div>
-        <h3>She knows your name</h3>
-        <p>Your name, your nickname, your family. She addresses you the way a trusted friend would — because that's what she becomes.</p>
-      </div>
-      <div class="knows-card fade-up">
-        <div class="knows-icon">🧠</div>
-        <h3>She never forgets</h3>
-        <p>Every preference, every dietary note, every routine she observes — remembered forever. You never have to repeat yourself.</p>
-      </div>
-      <div class="knows-card fade-up">
-        <div class="knows-icon">📈</div>
-        <h3>She gets smarter</h3>
-        <p>Month 1 she knows your name. Month 6 she knows Tuesday is soccer night and you need a 20-minute dinner. Month 12 she's irreplaceable.</p>
-      </div>
-      <div class="knows-card fade-up">
-        <div class="knows-icon">🔕</div>
-        <h3>She works quietly</h3>
-        <p>She does the heavy lifting in the background — connecting your meal plan to your shopping list to your store. You just live your life.</p>
-      </div>
-      <div class="knows-card fade-up">
-        <div class="knows-icon">💬</div>
-        <h3>She speaks when it matters</h3>
-        <p>One useful insight, never a flood. If Remi doesn't have something genuinely worth saying, she says nothing. Silence is better than noise.</p>
-      </div>
-      <div class="knows-card fade-up">
-        <div class="knows-icon">🔄</div>
-        <h3>She adapts to life</h3>
-        <p>New baby, new diet, new city, new relationship — Remi adapts with you. Food is the constant thread through every life change.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section class="features-section" id="features">
-  <div class="section-inner">
-    <div class="section-eyebrow fade-up">Everything Fern does</div>
-    <h2 class="fade-up">Plan. Discover. Shop. Cook. <em>Share.</em></h2>
-    <p class="section-sub fade-up">Every feature connects. Every action teaches Remi. Every week she serves you better.</p>
-
-    <div class="features-grid">
-      <div class="feature-card fade-up">
-        <span class="feature-tag tag-free">Free</span>
-        <h3>Find Recipes</h3>
-        <p>Search by ingredient, mood, or cuisine. Scan your grocery circular — She flags the deals that match your meal plan. Let AI surprise you.</p>
-        <div class="feature-items">
-          <div class="feature-item">Ingredient search</div>
-          <div class="feature-item">Grocery circular scanner</div>
-          <div class="feature-item">AI recipe suggestions</div>
-          <div class="feature-item">Food blogger recipes</div>
-        </div>
-      </div>
-
-      <div class="feature-card fade-up">
-        <span class="feature-tag tag-free">Free</span>
-        <h3>Weekly Planner</h3>
-        <p>5-day rolling calendar for your family. Add meals, activities, notes. She fills the gaps — she knows what you like and how much time you have.</p>
-        <div class="feature-items">
-          <div class="feature-item">5-day meal planning</div>
-          <div class="feature-item">Activities & family schedule</div>
-          <div class="feature-item">Auto shopping list generation</div>
-          <div class="feature-item">AI Fill Week (Pro)</div>
-        </div>
-      </div>
-
-      <div class="feature-card fade-up">
-        <span class="feature-tag tag-promax">Pro Max</span>
-        <h3>Personal Shopper</h3>
-        <p>Arrive at your store — Fern opens automatically. Your list sorted by aisle. Deal alerts from the circular. Running budget. One hand, two kids, no problem.</p>
-        <div class="feature-items">
-          <div class="feature-item">Geofence store detection</div>
-          <div class="feature-item">Items sorted by aisle</div>
-          <div class="feature-item">Circular deal alerts</div>
-          <div class="feature-item">Running budget tracker</div>
-        </div>
-      </div>
-
-      <div class="feature-card fade-up">
-        <span class="feature-tag tag-free">Free</span>
-        <h3>Cook Mode</h3>
-        <p>Tap Cook on any recipe. She walks you through it step by step — hands free. Scale for your family size. Even with the kids around.</p>
-        <div class="feature-items">
-          <div class="feature-item">Step-by-step guidance</div>
-          <div class="feature-item">Hands-free mode</div>
-          <div class="feature-item">Built-in timers</div>
-          <div class="feature-item">Smart scaling</div>
-        </div>
-      </div>
-
-      <div class="feature-card fade-up">
-        <span class="feature-tag tag-pro">Pro</span>
-        <h3>Food Bloggers</h3>
-        <p>Follow Half Baked Harvest, Minimalist Baker, and 48 more. Tap any recipe — She generates the full thing. You never leave the app.</p>
-        <div class="feature-items">
-          <div class="feature-item">50+ food bloggers</div>
-          <div class="feature-item">AI recipe generation</div>
-          <div class="feature-item">One-tap import</div>
-          <div class="feature-item">Source attribution</div>
-        </div>
-      </div>
-
-      <div class="feature-card fade-up">
-        <span class="feature-tag tag-pro">Pro</span>
-        <h3>Family Vault</h3>
-        <p>A private cookbook just for your family. Recipes, memories, notes. The digital version of the box of recipe cards your grandmother kept.</p>
-        <div class="feature-items">
-          <div class="feature-item">Private family cookbook</div>
-          <div class="feature-item">Recipe notes & memories</div>
-          <div class="feature-item">Share with family</div>
-          <div class="feature-item">Import from anywhere</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PERSONAL AI DEEP -->
-<section class="personal-ai-section">
-  <div class="section-inner">
-    <div class="personal-ai-inner">
-      <div>
-        <div class="section-eyebrow fade-up">The relationship</div>
-        <h2 class="fade-up">The longer you use Fern,<br>the more <em>irreplaceable</em> she becomes.</h2>
-        <div class="timeline">
-          <div class="timeline-item fade-up">
-            <div class="timeline-dot">1</div>
-            <div class="timeline-content">
-              <h4>Week 1 — Getting to know you</h4>
-              <p>Remi learns your name, nickname, household, cuisines you love, how much time you have. The conversation begins.</p>
-            </div>
-          </div>
-          <div class="timeline-item fade-up">
-            <div class="timeline-dot">2</div>
-            <div class="timeline-content">
-              <h4>Month 1 — Starting to know you</h4>
-              <p>She notices you cook Italian three nights a week. She knows Wednesday is busy. She stops suggesting complex recipes mid-week.</p>
-            </div>
-          </div>
-          <div class="timeline-item fade-up">
-            <div class="timeline-dot">3</div>
-            <div class="timeline-content">
-              <h4>Month 3 — She really knows you</h4>
-              <p>"Kiki, it's Tuesday. Soccer night. I have a 20-minute pasta that's been in your saved list for two weeks." That's Personal AI.</p>
-            </div>
-          </div>
-          <div class="timeline-item fade-up">
-            <div class="timeline-dot">∞</div>
-            <div class="timeline-content">
-              <h4>Month 6+ — Indispensable</h4>
-              <p>Switching apps means starting over with someone who knows nothing about you. Nobody wants to explain themselves all over again.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="remi-quote-block fade-up">
-          <div class="remi-quote-name">✨ your sous chef says</div>
-          <div class="remi-quote-text">"Kiki, you mentioned back in May that your daughter has a nut allergy. This week's Tuscan Chicken calls for pine nuts. Easy swap — just skip them."</div>
-          <div class="remi-quote-context">You didn't ask. She remembered. That's the moment a user stops using an app and starts having a relationship with it.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- LIFE CHANGES -->
-<section class="life-section">
-  <div class="section-inner">
-    <div class="section-eyebrow fade-up">Always with you</div>
-    <h2 class="fade-up">Food is the constant thread through<br>every <em>life change.</em></h2>
-    <p class="section-sub fade-up">She adapts when your life does. The relationship doesn't reset — it evolves.</p>
-
-    <div class="life-grid">
-      <div class="life-card fade-up">
-        <div class="life-card-emoji">🤰</div>
-        <h4>Getting pregnant</h4>
-        <p>Dietary restrictions change overnight. She adjusts every suggestion automatically.</p>
-        <div class="life-card-remi">"I'm eating for two now — no deli meat or sushi"</div>
-      </div>
-      <div class="life-card fade-up">
-        <div class="life-card-emoji">❤️</div>
-        <h4>New relationship</h4>
-        <p>Someone new at the table. New preferences to learn. She meets them too.</p>
-        <div class="life-card-remi">"He's coming Saturday — he's vegan, I want to impress him"</div>
-      </div>
-      <div class="life-card fade-up">
-        <div class="life-card-emoji">🥗</div>
-        <h4>Starting a diet</h4>
-        <p>Whole30, keto, Mediterranean — She filters every recipe and suggestion automatically.</p>
-        <div class="life-card-remi">"I'm starting Whole30 Monday — help me plan the week"</div>
-      </div>
-      <div class="life-card fade-up">
-        <div class="life-card-emoji">🏥</div>
-        <h4>Health diagnosis</h4>
-        <p>New dietary requirements for the whole family. She restructures everything quietly.</p>
-        <div class="life-card-remi">"My husband was just told he's diabetic"</div>
-      </div>
-      <div class="life-card fade-up">
-        <div class="life-card-emoji">🎓</div>
-        <h4>Empty nest</h4>
-        <p>Kids leave. Everything scales down. She adjusts serving sizes, grocery lists, all of it.</p>
-        <div class="life-card-remi">"It's just the two of us now — scale everything down"</div>
-      </div>
-      <div class="life-card fade-up">
-        <div class="life-card-emoji">📦</div>
-        <h4>Moving cities</h4>
-        <p>New stores, new circular, new neighborhood. She finds your store wherever you go.</p>
-        <div class="life-card-remi">"I don't know any stores here — help me find my Publix"</div>
-      </div>
-      <div class="life-card fade-up">
-        <div class="life-card-emoji">👶</div>
-        <h4>Baby's first foods</h4>
-        <p>New family member, new requirements. She knows what's safe at every stage.</p>
-        <div class="life-card-remi">"She's starting solids — what's safe at 6 months?"</div>
-      </div>
-      <div class="life-card fade-up">
-        <div class="life-card-emoji">💪</div>
-        <h4>New fitness goal</h4>
-        <p>High protein, low carb, meal prep Sunday. She builds the week around your goals.</p>
-        <div class="life-card-remi">"I'm training for a marathon — help me eat for performance"</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PRICING -->
-<section class="pricing-section" id="pricing">
-  <div class="section-inner">
-    <div class="section-eyebrow fade-up">Simple pricing</div>
-    <h2 class="fade-up">Start free. Upgrade when<br><em>she earns it.</em></h2>
-    <p class="section-sub fade-up">Everything here is free. When you're ready for more — she'll mention it when it feels right.</p>
-
-    <div class="pricing-grid">
-      <div class="pricing-card fade-up">
-        <div class="pricing-tier">Free</div>
-        <div class="pricing-price">$0</div>
-        <div class="pricing-period">Forever</div>
-        <ul class="pricing-features">
-          <li>Meet your sous chef, your Personal AI</li>
-          <li>Recipe search & discovery</li>
-          <li>Weekly Planner (5 days)</li>
-          <li>Shopping List</li>
-          <li>Cook Mode</li>
-          <li>My Recipes & Cookbooks</li>
-          <li>Grocery Circular Scanner</li>
-          <li>Import any recipe</li>
-        </ul>
-        <a href="https://app.clickpickandcook.com" class="pricing-btn pricing-btn-outline">Start free</a>
-      </div>
-
-      <div class="pricing-card featured fade-up">
-        <div class="pricing-badge">Most popular</div>
-        <div class="pricing-tier">Pro</div>
-        <div class="pricing-price">$2.99</div>
-        <div class="pricing-period">per month</div>
-        <ul class="pricing-features">
-          <li>Everything in Free</li>
-          <li>Follow Food Bloggers (50+)</li>
-          <li>AI Fill Week</li>
-          <li>Fridge Challenge</li>
-          <li>Leftover Magic</li>
-          <li>20-Min Dinner AI</li>
-          <li>Family Vault</li>
-          <li>AI Meal Planner</li>
-          <li>Budget Planner</li>
-        </ul>
-        <a href="https://app.clickpickandcook.com" class="pricing-btn pricing-btn-filled">Start Pro</a>
-      </div>
-
-      <div class="pricing-card fade-up">
-        <div class="pricing-tier">Pro Max</div>
-        <div class="pricing-price">$6.99</div>
-        <div class="pricing-period">per month</div>
-        <ul class="pricing-features">
-          <li>Everything in Pro</li>
-          <li>Personal Shopper (in-store AI)</li>
-          <li>Geofence store detection</li>
-          <li>Aisle-by-aisle guidance</li>
-          <li>Dinner Party Planner</li>
-          <li>Wine Pairing AI</li>
-          <li>Charcuterie Board Builder</li>
-          <li>Priority Personal AI</li>
-        </ul>
-        <a href="https://app.clickpickandcook.com" class="pricing-btn pricing-btn-outline">Start Pro Max</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ALEXA INTEGRATION -->
-<section style="background:var(--cream);padding:6rem 3rem;">
-  <div class="section-inner">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;">
-      <div>
-        <div class="section-eyebrow fade-up">Works with Alexa</div>
-        <h2 class="fade-up">"Alexa, ask Fern<br><em>what's for dinner.</em>"</h2>
-        <p class="section-sub fade-up" style="margin-bottom:2rem;">
-          Fern works with Amazon Alexa — bringing your Personal AI into your kitchen, hands-free. 
-          She already knows you. Now she can talk to you too.
-        </p>
-        <div style="display:flex;flex-direction:column;gap:1rem;margin-top:2rem;">
-          <div class="fade-up" style="display:flex;gap:1rem;align-items:flex-start;background:white;border-radius:14px;padding:1.25rem 1.5rem;border:1px solid var(--border);">
-            <div style="font-size:1.4rem;flex-shrink:0;">🎙️</div>
-            <div>
-              <div style="font-size:.82rem;font-weight:500;color:var(--forest);margin-bottom:.2rem;">"Alexa, ask Fern what's for dinner tonight"</div>
-              <div style="font-size:.78rem;color:var(--muted);font-weight:300;">She checks your planner, your list, and what you have — and gives you a real answer.</div>
-            </div>
-          </div>
-          <div class="fade-up" style="display:flex;gap:1rem;align-items:flex-start;background:white;border-radius:14px;padding:1.25rem 1.5rem;border:1px solid var(--border);">
-            <div style="font-size:1.4rem;flex-shrink:0;">🛒</div>
-            <div>
-              <div style="font-size:.82rem;font-weight:500;color:var(--forest);margin-bottom:.2rem;">"Alexa, tell Fern I'm going shopping"</div>
-              <div style="font-size:.78rem;color:var(--muted);font-weight:300;">Personal Shopper activates. Your list reads aloud by aisle. Hands free, cart in hand.</div>
-            </div>
-          </div>
-          <div class="fade-up" style="display:flex;gap:1rem;align-items:flex-start;background:white;border-radius:14px;padding:1.25rem 1.5rem;border:1px solid var(--border);">
-            <div style="font-size:1.4rem;flex-shrink:0;">👩‍🍳</div>
-            <div>
-              <div style="font-size:.82rem;font-weight:500;color:var(--forest);margin-bottom:.2rem;">"Alexa, ask Fern to start Cook Mode"</div>
-              <div style="font-size:.78rem;color:var(--muted);font-weight:300;">Step by step. Hands free. She knows which recipe you planned tonight — no need to say.</div>
-            </div>
-          </div>
-          <div class="fade-up" style="display:flex;gap:1rem;align-items:flex-start;background:white;border-radius:14px;padding:1.25rem 1.5rem;border:1px solid var(--border);">
-            <div style="font-size:1.4rem;flex-shrink:0;">📅</div>
-            <div>
-              <div style="font-size:.82rem;font-weight:500;color:var(--forest);margin-bottom:.2rem;">"Alexa, ask Fern what I made last Tuesday"</div>
-              <div style="font-size:.78rem;color:var(--muted);font-weight:300;">She remembers. Every meal, every week. That's Personal AI — not just voice commands.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="fade-up">
-        <div style="background:var(--forest);border-radius:28px;padding:3rem 2.5rem;text-align:center;position:relative;overflow:hidden;">
-          <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle at 30% 20%, rgba(125,189,106,.15) 0%, transparent 60%);pointer-events:none;"></div>
-          <div style="font-size:3rem;margin-bottom:1rem;">🔵</div>
-          <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--cream);margin-bottom:.75rem;font-weight:400;">One memory.<br>Every surface.</div>
-          <div style="font-size:.85rem;color:rgba(245,240,232,.55);line-height:1.7;margin-bottom:2rem;font-weight:300;">Fern lives in your phone, your kitchen speaker, and soon — wherever your family is. Same memory. Same relationship. Different voice.</div>
-          <div style="display:flex;flex-direction:column;gap:.75rem;">
-            <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem;">
-              <span style="font-size:1rem;">📱</span>
-              <span style="font-size:.82rem;color:var(--cream);">Fern App — iOS & Android</span>
-              <span style="margin-left:auto;font-size:.65rem;background:var(--leaf);color:var(--forest);padding:.2rem .5rem;border-radius:20px;font-weight:500;">Live</span>
-            </div>
-            <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem;">
-              <span style="font-size:1rem;">🔵</span>
-              <span style="font-size:.82rem;color:var(--cream);">Amazon Alexa Skill</span>
-              <span style="margin-left:auto;font-size:.65rem;background:var(--leaf);color:var(--forest);padding:.2rem .5rem;border-radius:20px;font-weight:500;">Live</span>
-            </div>
-            <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem;">
-              <span style="font-size:1rem;">⌚</span>
-              <span style="font-size:.82rem;color:var(--cream);">Apple Watch</span>
-              <span style="margin-left:auto;font-size:.65rem;background:rgba(255,255,255,.15);color:rgba(255,255,255,.5);padding:.2rem .5rem;border-radius:20px;font-weight:500;">Soon</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- NEVER FORGETS CTA -->
-<section class="never-forgets">
-  <div class="section-inner" style="text-align:center">
-    <div class="section-eyebrow fade-up" style="color:var(--mint);justify-content:center;display:flex;gap:.5rem;align-items:center;margin-bottom:1.5rem">
-      <span style="width:6px;height:6px;border-radius:50%;background:var(--leaf);display:inline-block"></span>
-      Personal AI
-    </div>
-    <h2 class="fade-up" style="max-width:800px;margin:0 auto 1.5rem">Finally. An AI that remembers<br><em>how your family eats.</em></h2>
-    <p class="fade-up" style="color:rgba(245,240,232,.6);font-size:1.05rem;line-height:1.75;max-width:520px;margin:0 auto 2.5rem;font-weight:300">
-      Your sous chef is waiting. Tell her your name, your nickname, what your family loves — then give her a name that feels right. She takes it from there. And she never forgets a word.
-    </p>
-    <a href="https://app.clickpickandcook.com" class="btn-primary fade-up" style="background:var(--leaf);color:var(--forest);display:inline-flex">
-      Start free — meet your sous chef →
-    </a>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="logo">Click Pick <span>&</span> Cook</a>
     <div>
-      <div class="footer-brand">
-        <svg width="20" height="26" viewBox="0 0 28 36" fill="none">
-          <path d="M14 34 Q14 20 14 6" stroke="#7DBD6A" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M14 22 Q7 15 4 18" stroke="#7DBD6A" stroke-width="2" stroke-linecap="round"/>
-          <path d="M14 17 Q6 9 3 13" stroke="#4A7C2F" stroke-width="2" stroke-linecap="round"/>
-          <path d="M14 12 Q8 5 6 8" stroke="#7DBD6A" stroke-width="1.8" stroke-linecap="round"/>
-          <path d="M14 22 Q21 15 24 18" stroke="#7DBD6A" stroke-width="2" stroke-linecap="round"/>
-          <path d="M14 17 Q22 9 25 13" stroke="#4A7C2F" stroke-width="2" stroke-linecap="round"/>
-          <path d="M14 12 Q20 5 22 8" stroke="#7DBD6A" stroke-width="1.8" stroke-linecap="round"/>
-        </svg>
-        <span class="footer-logo-text">fern</span>
+      <a href="#how" class="nav-link">How It Works</a>
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#coupons" class="nav-link">Coupons</a>
+      <a href="#bloggers" class="nav-link">Bloggers</a>
+      <a href="https://app.clickpickandcook.com" class="nav-link nav-cta">Sign Up Free</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text fade-up">
+      <div class="hero-badge">It doesn't matter where you shop</div>
+      <h1>From your weekly<br/><em>circular</em> to the dinner table.</h1>
+      <p class="hero-sub">Snap your grocery store circular, and we'll generate personalized AI recipes around what's on sale — plus connect you to your favorite food bloggers, your recipe box, your family calendar, and even Alexa.</p>
+      <div class="hero-actions">
+        <a href="https://app.clickpickandcook.com" class="btn-primary">Sign Up Free</a>
+        <a href="#how" class="btn-ghost">See how it works</a>
       </div>
-      <p class="footer-tagline">Personal AI for the way your family eats, plans, shops, and lives. Powered by Click Pick & Cook.</p>
     </div>
-    <div class="footer-col">
-      <h5>Product</h5>
-      <a href="#features">Features</a>
-      <a href="#pricing">Pricing</a>
-      <a href="https://app.clickpickandcook.com">Launch App</a>
+    <div class="hero-visual fade-up" style="transition-delay: 0.2s">
+      <img class="hero-img-main" src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80&fit=crop" alt="Family cooking together" />
+      <img class="hero-img-sub" src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&q=80&fit=crop" alt="Woman shopping for groceries" />
+      <div class="hero-pill">
+        <div class="hero-pill-icon">🛒</div>
+        <div>
+          <div style="font-size:0.78rem;color:var(--text-light);font-weight:400">This week's circular</div>
+          <div>12 recipes generated</div>
+        </div>
+      </div>
     </div>
-    <div class="footer-col">
-      <h5>Remi</h5>
-      <a href="#how-it-works">How it works</a>
-      <a href="https://app.clickpickandcook.com">Meet your sous chef</a>
-      <a href="#pricing">Plans</a>
+  </section>
+
+  <!-- SOCIAL PROOF -->
+  <div class="social-proof">
+    <div class="proof-item">
+      <span class="proof-num">50K+</span>
+      <span class="proof-label">Home cooks</span>
     </div>
-    <div class="footer-col">
-      <h5>Company</h5>
-      <a href="#">About</a>
+    <div class="proof-divider"></div>
+    <div class="proof-item">
+      <span class="proof-num">1,200+</span>
+      <span class="proof-label">Food bloggers</span>
+    </div>
+    <div class="proof-divider"></div>
+    <div class="proof-item">
+      <span class="proof-num">500K+</span>
+      <span class="proof-label">Recipes generated</span>
+    </div>
+    <div class="proof-divider"></div>
+    <div class="proof-item">
+      <span class="proof-num">Any store</span>
+      <span class="proof-label">Works everywhere</span>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="how-inner">
+      <div class="how-header fade-up">
+        <div class="section-label">Simple as 1-2-3</div>
+        <h2>Shop smarter.<br/>Cook better.</h2>
+        <p class="section-sub">It doesn't matter where you shop — any grocery store, any circular. We turn your weekly deals into a week of delicious meals.</p>
+      </div>
+      <div class="steps">
+        <div class="step fade-up">
+          <div class="step-icon">
+            📰
+            <div class="step-num">1</div>
+          </div>
+          <h3>Scan your circular</h3>
+          <p>Upload or photograph your grocery store's weekly circular — any store, any format. Our AI reads what's on sale.</p>
+        </div>
+        <div class="step fade-up" style="transition-delay:0.15s">
+          <div class="step-icon">
+            🤖
+            <div class="step-num">2</div>
+          </div>
+          <h3>Get AI-powered recipes</h3>
+          <p>We generate personalized recipes built around your sale items, blended with your recipe box and your favorite bloggers' content.</p>
+        </div>
+        <div class="step fade-up" style="transition-delay:0.3s">
+          <div class="step-icon">
+            🍽️
+            <div class="step-num">3</div>
+          </div>
+          <h3>Cook, share & connect</h3>
+          <p>Follow your meal plan, share recipes and cookbooks, track activities on your family calendar — and let Alexa read recipes aloud while you cook.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="features-inner">
+
+      <div class="features-grid fade-up">
+        <img class="feature-img" src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=800&q=80&fit=crop" alt="Family cooking" />
+        <div class="feature-text">
+          <div class="feature-tag">🤖 AI Recipes</div>
+          <h2>Your circular.<br/>Your recipes.<br/><em>Your family.</em></h2>
+          <p class="section-sub">Every week, your grocery store tells you what's affordable. We tell you what to cook with it — personalized recipes that match your taste, your budget, and what's actually in your kitchen.</p>
+          <ul class="feature-list">
+            <li>Scan any store's weekly circular</li>
+            <li>AI generates recipes around your sale items</li>
+            <li>Blends with your personal recipe box</li>
+            <li>Filters for dietary preferences & family size</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="features-grid reverse fade-up" id="bloggers">
+        <img class="feature-img" src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80&fit=crop" alt="Food blogger cooking" />
+        <div class="feature-text">
+          <div class="feature-tag">👩‍🍳 Food Bloggers</div>
+          <h2>Follow the cooks<br/>you <em>already love.</em></h2>
+          <p class="section-sub">Your favorite food bloggers are here. Follow them, get their latest recipes in your feed, and save their cookbooks directly to your collection — all in one place.</p>
+          <ul class="feature-list">
+            <li>Discover & follow 1,200+ food bloggers</li>
+            <li>Their recipes blend into your weekly meal plan</li>
+            <li>Save and organize blogger cookbooks</li>
+            <li>Share your own recipes with the community</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="features-grid fade-up">
+        <img class="feature-img" src="https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=800&q=80&fit=crop" alt="Family meal planning" />
+        <div class="feature-text">
+          <div class="feature-tag">📅 Family Calendar</div>
+          <h2>Your whole week,<br/><em>beautifully planned.</em></h2>
+          <p class="section-sub">Meal planning meets family scheduling. See your cooking activities, grocery runs, and family events in one calendar — and ask Alexa what's on the menu tonight.</p>
+          <ul class="feature-list">
+            <li>Integrated meal & family activity calendar</li>
+            <li>Alexa reads your recipes aloud in Cook Mode</li>
+            <li>Alexa tells you today's planned activities</li>
+            <li>Sync across the whole household</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="features-grid reverse fade-up" id="coupons">
+        <img class="feature-img" src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80&fit=crop" alt="Woman shopping with a full cart" />
+        <div class="feature-text">
+          <div class="feature-tag">🎟️ Coupon Wallet</div>
+          <h2>High-value coupons.<br/><em>Zero risk of waste.</em></h2>
+          <p class="section-sub">We focus on coupons for non-perishable essentials — the paper towels, detergent, vitamins, and pantry staples you'll use eventually anyway. Find a high-value coupon and it's automatically added to your shopping list. No expiration pressure, no rushing before something spoils — just real savings on things you were already going to buy.</p>
+          <ul class="feature-list">
+            <li>High-value coupons on non-perishable essentials</li>
+            <li>Automatically added to your shopping list — no clipping</li>
+            <li>Nothing perishable, so nothing goes to waste</li>
+            <li>Ready and waiting the next time you shop</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FEATURE CARDS -->
+  <div class="feature-cards">
+    <div class="cards-inner">
+      <div class="cards-header fade-up">
+        <div class="section-label">Everything Included</div>
+        <h2>One app for the whole<br/>cooking journey.</h2>
+        <p class="section-sub">From shopping to the table, we've got every step covered.</p>
+      </div>
+      <div class="cards-grid">
+        <div class="card fade-up">
+          <span class="card-emoji">📖</span>
+          <h3>Recipe Box</h3>
+          <p>Save, organize, and build your personal recipe collection. Yours forever, accessible anywhere.</p>
+        </div>
+        <div class="card fade-up" style="transition-delay:0.1s">
+          <span class="card-emoji">📚</span>
+          <h3>Cookbooks</h3>
+          <p>Create beautiful digital cookbooks to share with family and friends, or keep them private.</p>
+        </div>
+        <div class="card fade-up" style="transition-delay:0.2s">
+          <span class="card-emoji">🛒</span>
+          <h3>Smart Shopping Lists</h3>
+          <p>Auto-generated shopping lists from your meal plan, organized by store section.</p>
+        </div>
+        <div class="card fade-up" style="transition-delay:0.1s">
+          <span class="card-emoji">👥</span>
+          <h3>Community Sharing</h3>
+          <p>Share recipes with friends, follow home cooks in your community, discover new favorites.</p>
+        </div>
+        <div class="card fade-up" style="transition-delay:0.2s">
+          <span class="card-emoji">🎵</span>
+          <h3>Cook Mode</h3>
+          <p>Hands-free step-by-step cooking with voice guidance via Alexa and optional background music.</p>
+        </div>
+        <div class="card fade-up" style="transition-delay:0.3s">
+          <span class="card-emoji">💰</span>
+          <h3>Budget Tracking</h3>
+          <p>See exactly how much you're saving by cooking with sale items. Your wallet will notice.</p>
+        </div>
+        <div class="card fade-up" style="transition-delay:0.4s">
+          <span class="card-emoji">🎟️</span>
+          <h3>Coupon Wallet</h3>
+          <p>High-value coupons on non-perishable essentials, automatically added to your shopping list. Real savings, zero spoilage risk.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALEXA SECTION -->
+  <div class="alexa">
+    <div class="alexa-inner">
+      <div class="alexa-text fade-up">
+        <div class="section-label">Voice-Powered Cooking</div>
+        <h2 style="color:white">Cook hands-free<br/>with <em style="color:var(--green-light)">Alexa.</em></h2>
+        <p class="section-sub">Connect Click Pick & Cook to your Alexa device and cook without ever touching your phone. Ask Alexa to read the next step, check your schedule, or find out what's for dinner tonight.</p>
+        <div class="alexa-features">
+          <div class="alexa-feat">
+            <div class="alexa-feat-icon">📖</div>
+            "Alexa, read the next step in my recipe"
+          </div>
+          <div class="alexa-feat">
+            <div class="alexa-feat-icon">📅</div>
+            "Alexa, what cooking activities do I have today?"
+          </div>
+          <div class="alexa-feat">
+            <div class="alexa-feat-icon">🍽️</div>
+            "Alexa, what's for dinner tonight?"
+          </div>
+          <div class="alexa-feat">
+            <div class="alexa-feat-icon">⏱️</div>
+            "Alexa, set a timer for the roasted veggies"
+          </div>
+        </div>
+      </div>
+      <div class="alexa-visual">
+        <div class="alexa-device">
+          <div class="alexa-ring"></div>
+        </div>
+        <div class="alexa-bubble top">"Reading step 3..."</div>
+        <div class="alexa-bubble bottom">"Dinner at 6:30 tonight"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <div class="testimonials">
+    <div class="testimonials-inner">
+      <div class="testimonials-header fade-up">
+        <div class="section-label">Loved by home cooks</div>
+        <h2>Real families.<br/>Real meals.</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial fade-up">
+          <div class="stars">★★★★★</div>
+          <blockquote>"I used to throw away half my circular without a second look. Now I actually plan my whole week around what's on sale — and my grocery bill dropped $80 a month."</blockquote>
+          <div class="testimonial-author">
+            <div class="author-avatar">S</div>
+            <div>
+              <div class="author-name">Sarah M.</div>
+              <div class="author-role">Mom of 3, Chicago</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial fade-up" style="transition-delay:0.15s">
+          <div class="stars">★★★★★</div>
+          <blockquote>"The Alexa integration is a game changer. My hands are covered in dough and I just say 'next step' — no more touching my phone with floury hands."</blockquote>
+          <div class="testimonial-author">
+            <div class="author-avatar">R</div>
+            <div>
+              <div class="author-name">Rachel K.</div>
+              <div class="author-role">Home baker, Austin</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial fade-up" style="transition-delay:0.3s">
+          <div class="stars">★★★★★</div>
+          <blockquote>"I've been following three food bloggers for years. Having all their recipes in one place — mixed with my own — and built into a weekly plan is everything I didn't know I needed."</blockquote>
+          <div class="testimonial-author">
+            <div class="author-avatar">L</div>
+            <div>
+              <div class="author-name">Linda T.</div>
+              <div class="author-role">Food enthusiast, Seattle</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-inner fade-up">
+      <div class="section-label">Get Started Today</div>
+      <h2>Your circular is waiting.<br/><em>Let's cook.</em></h2>
+      <p class="section-sub">Join thousands of home cooks who are eating better, spending less, and actually enjoying the process again.</p>
+      <div class="cta-actions">
+        <a href="https://app.clickpickandcook.com" class="btn-primary">Sign Up Free</a>
+        <a href="https://app.clickpickandcook.com/login" class="btn-secondary">I already have an account</a>
+      </div>
+      <p class="cta-note">Free forever for home cooks. No credit card required.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Click Pick <span>&</span> Cook</div>
+    <div class="footer-links">
       <a href="#">Privacy</a>
       <a href="#">Terms</a>
+      <a href="#">For Bloggers</a>
+      <a href="#">Contact</a>
     </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2026 Fern · Click Pick & Cook. All rights reserved.</span>
-    <span>Personal AI for the family table.</span>
-  </div>
-</footer>
+    <p>© 2026 Click Pick & Cook. All rights reserved.</p>
+  </footer>
 
-<script>
-// Fade up on scroll
-var fadeEls = document.querySelectorAll('.fade-up');
-var observer = new IntersectionObserver(function(entries) {
-  entries.forEach(function(entry) {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  <script>
+    // Fade-up on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
 
-fadeEls.forEach(function(el) { observer.observe(el); });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-// Trigger hero elements immediately
-document.querySelectorAll('.hero .fade-up').forEach(function(el, i) {
-  setTimeout(function() { el.classList.add('visible'); }, i * 120);
-});
-</script>
+    // Trigger hero immediately
+    document.querySelectorAll('.hero .fade-up').forEach(el => {
+      setTimeout(() => el.classList.add('visible'), 100);
+    });
+  </script>
 </body>
 </html>
