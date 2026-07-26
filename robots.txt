@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://myaifern.com/sitemap.xml
