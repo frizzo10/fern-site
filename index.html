@@ -73,10 +73,26 @@
       overflow-x: hidden;
     }
 
+    /* ── PATENT BANNER ── */
+    .patent-banner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 101;
+      background: linear-gradient(90deg, #1f4a27, var(--green));
+      color: var(--orange);
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      line-height: 1.4;
+      padding: 10px 24px;
+    }
+
     /* ── NAV ── */
     nav {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 40px; left: 0; right: 0;
       z-index: 100;
       display: flex;
       align-items: center;
@@ -134,7 +150,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       align-items: center;
-      padding: 120px 48px 80px;
+      padding: 160px 48px 80px;
       gap: 60px;
       position: relative;
       overflow: hidden;
@@ -851,8 +867,9 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
-      nav { padding: 16px 24px; }
-      .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; }
+      .patent-banner { font-size: 0.66rem; padding: 8px 16px; letter-spacing: 0.04em; }
+      nav { top: 34px; padding: 16px 24px; }
+      .hero { grid-template-columns: 1fr; padding: 134px 24px 60px; }
       .hero-visual { height: 340px; }
       .hero-img-main { width: 80%; height: 260px; }
       .hero-img-sub { width: 50%; height: 200px; }
@@ -873,6 +890,9 @@
   </style>
 </head>
 <body>
+
+  <!-- PATENT BANNER -->
+  <div class="patent-banner">Patent-Pending &middot; U.S. App. No. 64/067,385</div>
 
   <!-- NAV -->
   <nav>
