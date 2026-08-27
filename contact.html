@@ -34,15 +34,8 @@
       line-height: 1.7;
     }
     a { color: var(--green); }
-    .patent-banner {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 101;
-      background: linear-gradient(90deg, #1f4a27, var(--green));
-      color: var(--cream); text-align: center; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.78rem;
-      line-height: 1.4; padding: 10px 24px;
-    }
     nav {
-      position: fixed; top: 40px; left: 0; right: 0; z-index: 100;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
       padding: 18px 48px; background: rgba(253,250,245,0.92);
       backdrop-filter: blur(12px); border-bottom: 1px solid rgba(58,125,68,0.10);
@@ -59,7 +52,7 @@
       text-decoration: none; font-size: 0.95rem;
     }
     main {
-      max-width: 760px; margin: 0 auto; padding: 200px 24px 100px;
+      max-width: 760px; margin: 0 auto; padding: 160px 24px 100px;
     }
     h1 {
       font-family: 'Playfair Display', serif; font-size: 2.6rem; color: var(--green);
@@ -82,16 +75,15 @@
     }
     @media (max-width: 640px) {
       nav { padding: 16px 24px; }
-      main { padding: 160px 20px 80px; }
+      main { padding: 120px 20px 80px; }
       h1 { font-size: 2rem; }
     }
   </style>
 </head>
 <body>
-  <div class="patent-banner">Patent-Pending &middot; U.S. App. No. 64/067,385</div>
   <nav>
     <a href="/" class="logo"><img src="/logo-icon.png" alt="Fern logo" />Fern</a>
-    <a href="https://app.clickpickandcook.com" class="nav-cta">Start Free — Stays Free</a>
+    <a href="/app" class="nav-cta">Start Free — Stays Free</a>
   </nav>
   <main>
 
@@ -109,9 +101,10 @@
     <div class="footer-links">
       <a href="/privacy">Privacy</a>
       <a href="/terms">Terms</a>
-      <a href="#">For Bloggers</a>
+      <a href="/product.html#bloggers">For Bloggers</a>
       <a href="/contact">Contact</a>
     </div>
+    <p class="patent-footer-note">Patent-Pending &middot; U.S. App. No. 64/067,385</p>
     <p>&copy; 2026 Fern. All rights reserved.</p>
   </footer>
 </body>
