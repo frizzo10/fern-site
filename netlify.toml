@@ -1,8 +1,9 @@
-# 301 legacy path to its real home
+# 301 legacy path to its real home (force=true guarantees this always applies)
 [[redirects]]
   from = "/bloggers"
   to = "/product#bloggers"
   status = 301
+  force = true
 
 # Proxy the web app so CTAs stay on the Fern domain
 [[redirects]]
