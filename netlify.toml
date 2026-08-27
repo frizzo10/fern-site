@@ -1,3 +1,10 @@
+# 301 legacy path to its real home
+[[redirects]]
+  from = "/bloggers"
+  to = "/product#bloggers"
+  status = 301
+
+# Proxy the web app so CTAs stay on the Fern domain
 [[redirects]]
   from = "/app"
   to = "https://app.clickpickandcook.com"
@@ -8,7 +15,20 @@
   to = "https://app.clickpickandcook.com/:splat"
   status = 200
 
+# The app's root-relative script/service-worker requests resolve against
+# whatever domain is in the address bar (myaifern.com when proxied via /app
+# above), so those specific asset paths need their own proxy too.
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/fern-tours.js"
+  to = "https://app.clickpickandcook.com/fern-tours.js"
+  status = 200
+
+[[redirects]]
+  from = "/fern-translations.js"
+  to = "https://app.clickpickandcook.com/fern-translations.js"
+  status = 200
+
+[[redirects]]
+  from = "/sw.js"
+  to = "https://app.clickpickandcook.com/sw.js"
   status = 200
