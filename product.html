@@ -870,12 +870,15 @@
   <!-- NAV -->
   <nav>
     <a href="/" class="logo"><img src="/nav-logo.png" alt="Fern logo" />Fern</a>
+    <button class="nav-toggle" aria-label="Open menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
     <div class="nav-links">
       <a href="/#how" class="nav-link">How It Works</a>
       <a href="/#features" class="nav-link">Features</a>
       <a href="/#coupons" class="nav-link">Coupons</a>
       <a href="/product.html" class="nav-link">Bloggers</a>
-      <a href="https://app.clickpickandcook.com" class="nav-link nav-cta">Start Free — Stays Free</a>
+      <a href="/app" class="nav-link nav-cta">Start Free — Stays Free</a>
     </div>
   </nav>
 
@@ -890,7 +893,7 @@
           <h2>Follow the cooks<br/>you <em>already love.</em></h2>
           <p class="section-sub">Your favorite food bloggers are here. Follow them, get their latest recipes in your feed, and save their cookbooks directly to your collection — all in one place.</p>
           <ul class="feature-list">
-            <li>Discover & follow 1,200+ food bloggers</li>
+            <li>Discover & follow food bloggers you already love</li>
             <li>Their recipes blend into your weekly meal plan</li>
             <li>Save and organize blogger cookbooks</li>
             <li>Share your own recipes with the community</li>
@@ -992,9 +995,9 @@
       <div class="section-label">Get Started Today</div>
       <h2>Ready to see it all<br/><em>in action?</em></h2>
       <div class="cta-actions">
-        <a href="https://app.clickpickandcook.com" class="btn-primary">Start Free — Stays Free</a>
+        <a href="/app" class="btn-primary">Start Free — Stays Free</a>
       </div>
-      <p class="cta-note">No card, no trap. Genuinely free, forever.</p>
+      <p class="cta-note">No card required. Free to start, upgrade anytime.</p>
     </div>
   </section>
 
@@ -1016,6 +1019,12 @@
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.12 });
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.querySelector('.nav-links').classList.remove('open');
+      });
+    });
   </script>
 </body>
 </html>
