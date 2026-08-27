@@ -1,4 +1,14 @@
 [[redirects]]
+  from = "/app"
+  to = "https://app.clickpickandcook.com"
+  status = 200
+
+[[redirects]]
+  from = "/app/*"
+  to = "https://app.clickpickandcook.com/:splat"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
